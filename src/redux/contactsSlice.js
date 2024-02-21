@@ -7,9 +7,11 @@ const contactsInitialState = {
   error: null,
 };
 
-const handlePending = state => (state.loading = true);
+const handlePending = state => {
+  state.isLoading = true;
+};
 
-const handleRejected = (state, action) => {
+const handleError = (state, action) => {
   state.isLoading = false;
   state.error = action.payload;
 };
@@ -25,7 +27,7 @@ const contactsSlice = createSlice({
         state.error = null;
         state.items = action.payload;
       })
-      .addCase(fetchContacts.rejected, handleRejected)
+      .addCase(fetchContacts.rejected, handleError)
 
       .addCase(addContact.pending, handlePending)
       .addCase(addContact.fulfilled, (state, action) => {
@@ -33,18 +35,18 @@ const contactsSlice = createSlice({
         state.error = null;
         state.items.push(action.payload);
       })
-      .addCase(addContact.rejected, handleRejected)
+      .addCase(addContact.rejected, handleError)
 
       .addCase(deleteContact.pending, handlePending)
       .addCase(deleteContact.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        const itemToDelete = state.items.findIndex(
-          item => item.id === action.payload.id
-        );
-        state.items.splice(itemToDelete, 1);
+        const index = state.items.findIndex(({ id }) => {
+          return id === action.payload.id;
+        });
+        state.items.splice(index, 1);
       })
-      .addCase(deleteContact.rejected, handleRejected);
+      .addCase(deleteContact.rejected, handleError);
   },
 });
 

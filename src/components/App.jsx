@@ -1,21 +1,20 @@
-import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Div, Heading } from './App.styled';
+import { Div, Heading, LoaderWrapper } from './App.styled';
 import { ContactForm } from './ContactForm';
 import { Filter } from './Filter';
 import { ContactList } from './ContactList';
-import { getError, getIsLoading } from '../redux/selectors';
 import { fetchContacts } from '../redux/operations';
+import { selectError, selectIsLoading } from '../redux/selectors';
+import { Bars } from 'react-loader-spinner';
 
 export const App = () => {
   const dispatch = useDispatch();
-
-  const isLoading = useSelector(getIsLoading);
-  const error = useSelector(getError);
+  const loading = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
 
   useEffect(() => {
-    console.log(6666);
     dispatch(fetchContacts());
   }, [dispatch]);
 
@@ -26,8 +25,12 @@ export const App = () => {
 
       <Heading>Contacts</Heading>
       <Filter />
-      {isLoading && <h2>Loading</h2>}
-      {error && <h2>Error</h2>}
+      {loading && (
+        <LoaderWrapper>
+          <Bars color="MidnightBlue" height="40" width="40" />
+        </LoaderWrapper>
+      )}
+      {error && <p>`${error}`</p>}
       <ContactList />
     </Div>
   );

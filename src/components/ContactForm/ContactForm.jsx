@@ -8,7 +8,10 @@ import {
   Button,
   InputWrap,
 } from './ContactForm.styled';
-import { getContacts } from '../../redux/selectors';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { selectItems } from '../../redux/selectors';
 import { addContact } from '../../redux/operations';
 
 const formNameId = nanoid();
@@ -16,37 +19,49 @@ const fornNumberId = nanoid();
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectItems);
 
   const handleSubmit = e => {
     e.preventDefault();
 
     const form = e.currentTarget;
     const name = form.name.value;
-    const number = form.number.value;
+    const phone = form.number.value;
 
     const isExist = contacts
       .map(({ name }) => name.toLowerCase())
       .includes(name.toLowerCase());
 
     if (isExist) {
-      alert(`${name} is already in contacts.`);
-      return;
+      return toast.warning(`${name} is already in contacts.`);
     }
 
-    dispatch(addContact({ name, number }));
+    dispatch(addContact({ name, phone }));
     form.reset();
   };
 
   return (
     <Form onSubmit={handleSubmit}>
+      <ToastContainer />
       <InputWrap>
         <Label htmlFor={formNameId}>Name</Label>
-        <FormInput id={formNameId} type="text" name="name" required />
+        <FormInput
+          id={formNameId}
+          type="text"
+          name="name"
+          autoComplete="off"
+          required
+        />
       </InputWrap>
       <InputWrap>
         <Label htmlFor={fornNumberId}>Number</Label>
-        <FormInput id={fornNumberId} type="tel" name="number" required />
+        <FormInput
+          id={fornNumberId}
+          type="tel"
+          name="number"
+          autoComplete="off"
+          required
+        />
       </InputWrap>
       <Button type="submit">Add contact</Button>
     </Form>
