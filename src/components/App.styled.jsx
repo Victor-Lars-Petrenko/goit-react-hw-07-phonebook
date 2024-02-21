@@ -12,6 +12,13 @@ export const Heading = styled.h2`
   margin-bottom: 8px;
 `;
 
+export const ErrorWrapper = styled.h2`
+  color: Navy;
+  text-align: center;
+  margin-top: 24px;
+  font-size: 16px;
+`;
+
 export const LoaderWrapper = styled.div`
   width: 40px;
   margin: 0 auto;

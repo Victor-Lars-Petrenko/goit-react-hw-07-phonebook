@@ -8,8 +8,7 @@ import {
   Button,
   InputWrap,
 } from './ContactForm.styled';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 import { selectItems } from '../../redux/selectors';
 import { addContact } from '../../redux/operations';
@@ -42,7 +41,6 @@ export const ContactForm = () => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <ToastContainer />
       <InputWrap>
         <Label htmlFor={formNameId}>Name</Label>
         <FormInput
